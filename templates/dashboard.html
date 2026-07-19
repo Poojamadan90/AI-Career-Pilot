@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+    <h2>
+        Welcome, {{ user }} 👋
+    </h2>
+
+    <p>
+        Analyze your resume and get personalized career guidance.
+    </p>
+
+</div>
+
+
+<div class="card analyzer-card">
+
+    <h3>🤖 Resume Analyzer</h3>
+
+    <p class="sub-text">
+        Upload your resume or paste content to get AI-powered feedback.
+    </p>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <textarea
+            class="resume-textarea"
+            name="resume"
+            placeholder="Paste your resume content here..."
+            rows="10"
+        ></textarea>
+
+        <label class="upload-label">
+            Upload Resume (PDF):
+        </label>
+
+        <input
+            class="file-upload"
+            type="file"
+            name="file"
+            accept=".pdf"
+        >
+
+        <input
+            class="role-input"
+            type="text"
+            name="role"
+            placeholder="What do you want to become? (e.g. Backend Engineer)"
+            required
+        >
+
+        <button
+            class="primary-btn"
+            type="submit">
+            Analyze Resume 🚀
+        </button>
+
+    </form>
+
+</div>
+
+
+{% if result %}
+
+<div class="card result-card">
+
+    {% if result.error %}
+        <p class="error-message">
+            <strong>Error:</strong> {{ result.error }}
+        </p>
+    {% endif %}
+
+    <!-- ATS SCORE -->
+
+    <div class="ats-card">
+
+        <h3>🎯 ATS Score</h3>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                style="width: {{ result.get('ats_score',0) }}%;">
+            </div>
+
+        </div>
+
+        <h2>{{ result.get("ats_score",0) }}/100</h2>
+
+    </div>
+
+
+    <!-- SKILLS -->
+
+    <h3>✅ Skills Found</h3>
+
+    <ul>
+        {% for skill in result.get("skills", []) %}
+            <li>{{ skill }}</li>
+        {% else %}
+            <li>No skills found.</li>
+        {% endfor %}
+    </ul>
+
+
+    <!-- MISSING SKILLS -->
+
+    <h3>📌 Skills To Improve</h3>
+
+    <ul>
+        {% for skill in result.get("missing_skills", []) %}
+            <li>{{ skill }}</li>
+        {% else %}
+            <li>No missing skills.</li>
+        {% endfor %}
+    </ul>
+
+
+    <!-- STRENGTHS -->
+
+    <h3>💪 Resume Strengths</h3>
+
+    <ul>
+        {% for item in result.get("strengths", []) %}
+            <li>{{ item }}</li>
+        {% else %}
+            <li>No strengths found.</li>
+        {% endfor %}
+    </ul>
+
+
+    <!-- IMPROVEMENTS -->
+
+    <h3>🛠 Improvements</h3>
+
+    <ul>
+        {% for item in result.get("improvements", []) %}
+            <li>{{ item }}</li>
+        {% else %}
+            <li>No improvements found.</li>
+        {% endfor %}
+    </ul>
+
+
+    <!-- ROADMAP -->
+
+    <h3>🛣 Career Roadmap</h3>
+
+    <ul>
+        {% for item in result.get("roadmap", []) %}
+            <li>{{ item }}</li>
+        {% else %}
+            <li>No roadmap available.</li>
+        {% endfor %}
+    </ul>
+
+
+    <!-- INTERVIEW -->
+
+    <h3>💬 Interview Preparation</h3>
+
+    <ul>
+        {% for question in result.get("interview_questions", []) %}
+            <li>{{ question }}</li>
+        {% else %}
+            <li>No interview questions available.</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

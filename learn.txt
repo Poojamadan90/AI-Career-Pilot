@@ -1,0 +1,14 @@
+venv setup # isolated box for project
+
+with venv 
+flask # to create web application
+sqlalchemy # database handling
+pymsql # to connect with tydb
+genai# to integrate with Ai
+Pypdf2# to read the existing resume
+python doc-x # to read the doc file
+pip install flask,sqlalchemy,pymsql,Pypdf2 python doc-x
+
+steps
+1 -setup
+2 - database connection
